@@ -3,19 +3,13 @@ import { invalidateQuery, useMutation } from "@blitzjs/core"
 import dayjs from "dayjs"
 import { FC, useEffect, useState } from "react"
 import { FaTimes } from "react-icons/fa"
+import formatSeconds from "../helper/format-seconds"
 import deleteActivity from "../mutations/delete-activity"
 import startClockOnActivity from "../mutations/start-clock-on-activity"
 import getActivitiesForNamespaceAndCurrentUser from "../queries/get-activities-for-namespace-and-current-user"
 
 interface ActivityProps {
   activity: Activity
-}
-
-const formatSeconds = (seconds: number = 0) => {
-  const totalMinutes = Math.floor(seconds / 60)
-  const minutesInHour = totalMinutes % 60
-  const hours = Math.floor(totalMinutes / 60)
-  return `${hours}:${minutesInHour > 9 ? minutesInHour : `0${minutesInHour}`}`
 }
 
 const ActivityCard: FC<ActivityProps> = ({ activity }) => {
