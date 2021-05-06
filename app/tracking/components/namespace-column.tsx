@@ -1,4 +1,4 @@
-import { useQuery } from "@blitzjs/core"
+import { Link, Routes, useQuery } from "@blitzjs/core"
 import { FC } from "react"
 import getNamespacesForCurrentUser from "../queries/get-namespaces-for-current-user"
 
@@ -13,17 +13,19 @@ const NamespaceColumn: FC<NamespaceColumnProps> = (props) => {
     <>
       {namespaces.map((namespace) => (
         <div className="px-2">
-          <button
-            className={`block hover:bg-gray-800 rounded-xl w-full text-gray-200 text-left px-3 py-2 ${
-              props.selectedNamespaceId === namespace.id
-                ? "bg-gradient-to-r from-teal-400 to-green-600 text-white font-bold"
-                : ""
-            }`}
-            key={namespace.id}
-            onClick={() => props.onNamespaceSelect(namespace.id)}
-          >
-            <h2 className="text-lg">{namespace.name}</h2>
-          </button>
+          <Link href={Routes.TrackingNamespace({ namespaceId: namespace.id })}>
+            <button
+              className={`block hover:bg-gray-800 rounded-xl w-full text-gray-200 text-left px-3 py-2 ${
+                props.selectedNamespaceId === namespace.id
+                  ? "bg-gradient-to-r from-teal-400 to-green-600 text-white font-bold"
+                  : ""
+              }`}
+              key={namespace.id}
+              onClick={() => props.onNamespaceSelect(namespace.id)}
+            >
+              <h2 className="text-lg">{namespace.name}</h2>
+            </button>
+          </Link>
         </div>
       ))}
     </>
