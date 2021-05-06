@@ -69,10 +69,12 @@ model Namespace {
 }
 
 model Activity {
-  id          Int       @id @default(autoincrement())
-  name        String
-  namespaceId Int
-  namespace   Namespace @relation(fields: [namespaceId], references: [id])
+  id             Int       @id @default(autoincrement())
+  name           String
+  namespaceId    Int
+  clockStartedAt DateTime?
+  clockSeconds   Int       @default(0)
+  namespace      Namespace @relation(fields: [namespaceId], references: [id])
 }
 
 // NOTE: It's highly recommended to use an enum for the token type
