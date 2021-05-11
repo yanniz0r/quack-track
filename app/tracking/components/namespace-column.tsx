@@ -3,7 +3,6 @@ import { FC } from "react"
 import getNamespacesForCurrentUser from "../queries/get-namespaces-for-current-user"
 
 interface NamespaceColumnProps {
-  onNamespaceSelect(namespaceId: number): void
   selectedNamespaceId?: number
 }
 
@@ -21,7 +20,6 @@ const NamespaceColumn: FC<NamespaceColumnProps> = (props) => {
                   : ""
               }`}
               key={namespace.id}
-              onClick={() => props.onNamespaceSelect(namespace.id)}
             >
               <h2 className="text-lg">{namespace.name}</h2>
             </button>
