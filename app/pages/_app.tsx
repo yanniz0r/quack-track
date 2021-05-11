@@ -8,7 +8,7 @@ import {
   useQueryErrorResetBoundary,
 } from "blitz"
 import { ErrorBoundary } from "react-error-boundary"
-import LoginForm from "app/auth/components/LoginForm"
+import LoginForm from "app/auth/components/login-form"
 import "tailwindcss/tailwind.css"
 
 export default function App({ Component, pageProps }: AppProps) {
