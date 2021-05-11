@@ -45,7 +45,7 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
         <div className="min-h-screen flex-grow flex flex-col">
           <div className="bg-gray-800 flex">
             <button
-              className="p-5 w-full text-lg flex flex-row items-center"
+              className="p-5 px-7 w-full text-lg flex flex-row items-center"
               onClick={() => setSearchModalOpen(true)}
             >
               <FaSearch className="mr-3" />

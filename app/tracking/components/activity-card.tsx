@@ -10,9 +10,10 @@ import getActivitiesForNamespaceAndCurrentUser from "../queries/get-activities-f
 
 interface ActivityProps {
   activity: Activity
+  highlighted?: boolean
 }
 
-const ActivityCard: FC<ActivityProps> = ({ activity }) => {
+const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
   const [deleteActivityMutation] = useMutation(deleteActivity)
   const [addedSeconds, setAddedSeconds] = useState(0)
   const [startClockOnActivityMutation] = useMutation(startClockOnActivity)
@@ -43,7 +44,9 @@ const ActivityCard: FC<ActivityProps> = ({ activity }) => {
 
   return (
     <button
-      className={`group text-left block px-5 py-3 bg-gray-800 rounded-lg transition-all transform hover:scale-105 hover:shadow-lg ${
+      className={`group text-left block px-5 py-3 ${
+        highlighted ? "bg-teal-900" : "bg-gray-800"
+      } rounded-lg transition-all transform hover:scale-105 hover:shadow-lg ${
         activity.clockStartedAt ? "ring-2 ring-teal-600" : ""
       }`}
       key={activity.id}

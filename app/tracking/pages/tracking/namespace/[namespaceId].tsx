@@ -1,4 +1,4 @@
-import { BlitzPage, useParam } from "@blitzjs/core"
+import { BlitzPage, useParam, useRouterQuery } from "@blitzjs/core"
 import { Suspense, useState } from "react"
 import { FaPlus } from "react-icons/fa"
 import Activities from "../../../components/activities"
@@ -10,6 +10,11 @@ const TrackingNamespace: BlitzPage = () => {
   const namespaceId = parseInt(namespaceIdParameter, 10)
 
   const [createActivityModalOpen, setCreateActivityModalOpen] = useState(false)
+
+  const query = useRouterQuery()
+
+  const selectedActivityId =
+    typeof query["activity"] === "string" ? parseInt(query["activity"], 10) : undefined
 
   const modals = (
     <CreateActivityModal
@@ -23,7 +28,10 @@ const TrackingNamespace: BlitzPage = () => {
     <TrackingPage modals={modals}>
       {namespaceId && (
         <Suspense fallback="Loading...">
-          <Activities selectedNamespaceId={namespaceId} />
+          <Activities
+            selectedNamespaceId={namespaceId}
+            highlightedActivityId={selectedActivityId}
+          />
         </Suspense>
       )}
       <button
