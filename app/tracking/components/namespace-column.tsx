@@ -11,7 +11,7 @@ const NamespaceColumn: FC<NamespaceColumnProps> = (props) => {
   return (
     <>
       {namespaces.map((namespace) => (
-        <div className="px-2">
+        <div className="px-2" key={namespace.id}>
           <Link href={Routes.TrackingNamespace({ namespaceId: namespace.id })}>
             <button
               className={`block hover:bg-gray-800 rounded-xl w-full text-gray-200 text-left px-3 py-2 ${

@@ -6,7 +6,13 @@ export default async function getNamespacesForCurrentUser(_ = null, ctx: Ctx) {
   const currentUser = await getCurrentUser(null, ctx)
   if (!currentUser) throw new AuthenticationError("User has to be signed in to fetch namespaces")
 
-  const namespaces = await db.namespace.findMany()
+  const namespaces = await db.namespace.findMany({
+    where: {
+      user: {
+        id: currentUser.id,
+      },
+    },
+  })
 
   return namespaces
 }
