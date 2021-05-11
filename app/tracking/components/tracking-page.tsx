@@ -19,7 +19,7 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
       <CreateNamespaceModal open={createNamespaceModalOpen} setOpen={setCreateNamespaceModalOpen} />
       <SearchModal open={searchModalOpen} setOpen={setSearchModalOpen} />
       {modals}
-      <div className="flex flex-row h-screen">
+      <div className="flex flex-row min-h-screen">
         <div className="w-1/5 border-r border-gray-800 flex flex-col">
           <div className="p-5">
             <h2 className="uppercase text-sm text-gray-400">Namespaces</h2>
@@ -43,8 +43,8 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
             </div>
           </div>
         </div>
-        <div className="flex-grow">
-          <div className="bg-gray-800">
+        <div className="min-h-screen flex-grow flex flex-col">
+          <div className="bg-gray-800 flex">
             <button
               className="p-5 w-full text-lg flex flex-row items-center"
               onClick={() => setSearchModalOpen(true)}
@@ -53,7 +53,7 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
               <span>Schnellsuche</span>
             </button>
           </div>
-          <div className="relative h-full">{children}</div>
+          <div className="relative flex-grow ">{children}</div>
         </div>
       </div>
     </div>
