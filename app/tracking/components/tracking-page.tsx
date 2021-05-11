@@ -1,5 +1,6 @@
+import { useParam } from "@blitzjs/core"
 import { FC, ReactNode, Suspense, useState } from "react"
-import { FaPlusCircle, FaSearch } from "react-icons/fa"
+import { FaPlus, FaSearch } from "react-icons/fa"
 import CreateNamespaceModal from "./create-namespace-modal"
 import NamespaceColumn, { NamespaceColumnSkeleton } from "./namespace-column"
 import SearchModal from "./search-modal"
@@ -11,8 +12,7 @@ interface TrackingPageProps {
 const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
   const [createNamespaceModalOpen, setCreateNamespaceModalOpen] = useState(false)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
-
-  const [selectedNamespaceId, setSelectedNamespaceId] = useState<number>()
+  const selectedNamespaceId = useParam("namespaceId", "string")
 
   return (
     <div className="bg-gray-900 text-gray-300">
@@ -20,27 +20,26 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
       <SearchModal open={searchModalOpen} setOpen={setSearchModalOpen} />
       {modals}
       <div className="flex flex-row min-h-screen">
-        <div className="w-1/5 border-r border-gray-800 flex flex-col">
+        <div className="w-1/4 xl:w-1/6 flex-shrink-0 border-r border-gray-800 flex flex-col">
           <div className="p-5">
-            <h2 className="uppercase text-sm text-gray-400">Namespaces</h2>
+            <h2 className="uppercase text-sm text-gray-400 bg-opacity-0 flex justify-between">
+              <span>Namespaces</span>
+              <button
+                className="bg-teal-500 bg-opacity-0 hover:bg-opacity-100 transition-all text-white h-5 w-5 flex text-xs items-center justify-center rounded-full"
+                onClick={() => setCreateNamespaceModalOpen(true)}
+              >
+                <FaPlus />
+              </button>
+            </h2>
           </div>
           <div className="flex-grow">
             <Suspense fallback={<NamespaceColumnSkeleton />}>
               <NamespaceColumn
-                onNamespaceSelect={setSelectedNamespaceId}
-                selectedNamespaceId={selectedNamespaceId}
+                selectedNamespaceId={
+                  selectedNamespaceId ? parseInt(selectedNamespaceId) : undefined
+                }
               />
             </Suspense>
-          </div>
-          <div>
-            <div className="p-5">
-              <button
-                onClick={() => setCreateNamespaceModalOpen(true)}
-                className="rounded-lg font-semibold p-5 flex items-center justify-center bg-teal-500 w-full text-white"
-              >
-                <FaPlusCircle className="mr-2" /> Namespace hinzufügen
-              </button>
-            </div>
           </div>
         </div>
         <div className="min-h-screen flex-grow flex flex-col">
