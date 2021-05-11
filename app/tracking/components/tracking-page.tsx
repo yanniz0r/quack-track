@@ -1,4 +1,4 @@
-import { useParam } from "@blitzjs/core"
+import { Link, Routes, useParam } from "@blitzjs/core"
 import { FC, ReactNode, Suspense, useState } from "react"
 import { FaPlus, FaSearch } from "react-icons/fa"
 import CreateNamespaceModal from "./create-namespace-modal"
@@ -21,7 +21,15 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
       {modals}
       <div className="flex flex-row min-h-screen">
         <div className="w-1/4 xl:w-1/6 flex-shrink-0 border-r border-gray-800 flex flex-col">
-          <div className="p-5">
+          <div className="p-2">
+            <Link href={Routes.TrackingDashboard()}>
+              <a className="block p-3 hover:bg-gray-800 rounded-xl">Dashboard</a>
+            </Link>
+            <Link href={Routes.TrackingDashboard()}>
+              <a className="block p-3 hover:bg-gray-800 rounded-xl">Zeitübersicht</a>
+            </Link>
+          </div>
+          <div className="px-5 pb-2 pt-5">
             <h2 className="uppercase text-sm text-gray-400 bg-opacity-0 flex justify-between">
               <span>Namespaces</span>
               <button
