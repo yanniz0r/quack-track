@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "postdeploy": "yarn blitz prisma migrate deploy"
+  }
+}
