@@ -16,7 +16,10 @@ export default async function getActivitiesForNamespaceAndCurrentUser(filter: Fi
 
   const namespaces = await db.activity.findMany({
     where: {
-      namespaceId: filter.namespaceId,
+      namespace: {
+        id: filter.namespaceId,
+        userId: currentUser.id,
+      },
     },
   })
 

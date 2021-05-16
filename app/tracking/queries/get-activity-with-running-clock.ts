@@ -8,6 +8,9 @@ export default async function getActivityWithRunningClock(data: null, ctx: Ctx) 
     throw new AuthenticationError("User has to be signed in to fetch activity with running clock")
 
   const activity = await db.activity.findFirst({
+    include: {
+      namespace: true,
+    },
     where: {
       clockStartedAt: {
         not: null,
