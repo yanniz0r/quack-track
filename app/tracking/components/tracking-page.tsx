@@ -28,7 +28,7 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
             <Link href={Routes.TrackingDashboard()}>
               <a className="block p-3 hover:bg-gray-800 rounded-xl">Dashboard</a>
             </Link>
-            <Link href={Routes.TrackingDashboard()}>
+            <Link href={Routes.TrackingOverview()}>
               <a className="block p-3 hover:bg-gray-800 rounded-xl">Zeitübersicht</a>
             </Link>
           </div>

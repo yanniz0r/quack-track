@@ -1,8 +1,8 @@
 import { BlitzPage, useQuery } from "@blitzjs/core"
-import dayjs from "dayjs"
 import { FC, Suspense } from "react"
 import TrackingPage from "../../components/tracking-page"
 import formatSeconds from "../../helper/format-seconds"
+import getSecondsSinceDate from "../../helper/get-seconds-since-date"
 import getOverviewForCurrentUser from "../../queries/get-overview-for-current-user"
 
 const Overview: FC = () => {
@@ -32,9 +32,7 @@ const Overview: FC = () => {
                   <th className="text-right px-5 py-2">
                     {formatSeconds(
                       activity.clockSeconds +
-                        (activity.clockStartedAt
-                          ? dayjs().diff(activity.clockStartedAt, "seconds")
-                          : 0)
+                        (activity.clockStartedAt ? getSecondsSinceDate(activity.clockStartedAt) : 0)
                     )}
                   </th>
                 </tr>
@@ -47,9 +45,7 @@ const Overview: FC = () => {
                       return (
                         previous +
                         current.clockSeconds +
-                        (current.clockStartedAt
-                          ? dayjs().diff(current.clockStartedAt, "seconds")
-                          : 0)
+                        (current.clockStartedAt ? getSecondsSinceDate(current.clockStartedAt) : 0)
                       )
                     }, 0)
                   )}
