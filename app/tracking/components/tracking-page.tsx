@@ -21,6 +21,9 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
       {modals}
       <div className="flex flex-row min-h-screen">
         <div className="w-1/4 xl:w-1/6 flex-shrink-0 border-r border-gray-800 flex flex-col">
+          <div className="h-16 px-3 flex items-center justify-center">
+            <img alt="Logo" src="/images/logo.png" />
+          </div>
           <div className="p-2">
             <Link href={Routes.TrackingDashboard()}>
               <a className="block p-3 hover:bg-gray-800 rounded-xl">Dashboard</a>
@@ -53,7 +56,7 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
         <div className="min-h-screen flex-grow flex flex-col">
           <div className="bg-gray-800 flex">
             <button
-              className="p-5 px-7 w-full text-lg flex flex-row items-center"
+              className="h-16 px-7 w-full text-lg flex flex-row items-center"
               onClick={() => setSearchModalOpen(true)}
             >
               <FaSearch className="mr-3" />
