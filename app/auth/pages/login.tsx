@@ -1,4 +1,4 @@
-import { useRouter, BlitzPage } from "blitz"
+import { useRouter, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { LoginForm } from "app/auth/components/login-form"
 
@@ -15,7 +15,9 @@ const LoginPage: BlitzPage = () => {
           <h1 className="text-6xl text-white mb-7">Howdy Fren!</h1>
           <LoginForm
             onSuccess={() => {
-              const next = router.query.next ? decodeURIComponent(router.query.next as string) : "/"
+              const next = router.query.next
+                ? decodeURIComponent(router.query.next as string)
+                : Routes.TrackingDashboard()
               router.push(next)
             }}
           />
