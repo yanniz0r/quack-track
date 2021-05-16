@@ -28,8 +28,7 @@ export default async function getOverviewForCurrentUser(_ = null, ctx: Ctx) {
         },
       },
     },
-    select: {
-      name: true,
+    include: {
       activities: {
         select: {
           name: true,
