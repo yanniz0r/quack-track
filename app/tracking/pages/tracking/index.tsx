@@ -1,10 +1,12 @@
 import { invalidateQuery, useMutation, useQuery } from "@blitzjs/core"
 import { FC, Suspense, useCallback, useEffect, useState } from "react"
 import { FaStop } from "react-icons/fa"
+import EditableContent from "../../../core/components/editable-content"
 import TrackingPage from "../../components/tracking-page"
 import formatSeconds from "../../helper/format-seconds"
 import getSecondsSinceDate from "../../helper/get-seconds-since-date"
 import stopClockForCurrentUser from "../../mutations/stop-clock-for-current-user"
+import updateActivity from "../../mutations/update-activity"
 import getActivityWithRunningClock from "../../queries/get-activity-with-running-clock"
 
 const CIRCLE_SIZE = 85
@@ -15,6 +17,7 @@ const CIRCUMFERENCE = CIRCLE_RADIUS * 2 * Math.PI
 const RunningClock: FC = () => {
   const [stopClockMutation] = useMutation(stopClockForCurrentUser)
   const [activity] = useQuery(getActivityWithRunningClock, null)
+  const [updateActivityMutation] = useMutation(updateActivity)
   const [addedSeconds, setAddedSeconds] = useState(
     activity?.clockStartedAt ? getSecondsSinceDate(activity.clockStartedAt) : 0
   )
@@ -75,7 +78,18 @@ const RunningClock: FC = () => {
           <FaStop />
         </button>
         <h4 className="uppercase text-gray-400">Laufende Uhr</h4>
-        <h3 className="text-3xl pt-1">{activity.name}</h3>
+        <h3 className="text-3xl pt-1">
+          <EditableContent
+            onChange={async (newName) => {
+              await updateActivityMutation({
+                activityId: activity.id,
+                name: newName,
+              })
+              invalidateQuery(getActivityWithRunningClock)
+            }}
+            text={activity.name}
+          />
+        </h3>
         <span className="bg-green-400 text-gray-800 p-1 px-2 inline-block mt-3 font-bold text-sm rounded-full">
           {activity.namespace.name}
         </span>

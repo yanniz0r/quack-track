@@ -31,6 +31,7 @@ export default async function getOverviewForCurrentUser(_ = null, ctx: Ctx) {
     include: {
       activities: {
         select: {
+          id: true,
           name: true,
           clockSeconds: true,
           clockStartedAt: true,

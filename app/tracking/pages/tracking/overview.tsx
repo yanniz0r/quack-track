@@ -1,11 +1,13 @@
 import { Namespace } from ".prisma/client"
-import { BlitzPage, useQuery } from "@blitzjs/core"
+import { BlitzPage, invalidateQuery, useMutation, useQuery } from "@blitzjs/core"
 import { FC, Suspense, useMemo, useState } from "react"
+import EditableContent from "../../../core/components/editable-content"
 import Modal from "../../../core/components/modal"
 import BookTimeModal from "../../components/book-time-modal"
 import TrackingPage from "../../components/tracking-page"
 import formatSeconds from "../../helper/format-seconds"
 import getSecondsSinceDate from "../../helper/get-seconds-since-date"
+import updateActivity from "../../mutations/update-activity"
 import getOverviewForCurrentUser from "../../queries/get-overview-for-current-user"
 
 interface OverviewProps {
@@ -14,6 +16,7 @@ interface OverviewProps {
 
 const Overview: FC<OverviewProps> = ({ bookTime }) => {
   const [namespaces] = useQuery(getOverviewForCurrentUser, null)
+  const [updateActivityMutation] = useMutation(updateActivity)
   return (
     <>
       {namespaces.map((namespace, index) => (
@@ -41,7 +44,18 @@ const Overview: FC<OverviewProps> = ({ bookTime }) => {
             <tbody>
               {namespace.activities.map((activity, index) => (
                 <tr className="border-b border-gray-700" key={index}>
-                  <th className="text-left px-5 py-2">{activity.name}</th>
+                  <th className="text-left px-5 py-2">
+                    <EditableContent
+                      onChange={async (newName) => {
+                        await updateActivityMutation({
+                          activityId: activity.id,
+                          name: newName,
+                        })
+                        invalidateQuery(getOverviewForCurrentUser)
+                      }}
+                      text={activity.name}
+                    />
+                  </th>
                   <th className="text-right px-5 py-2">
                     {formatSeconds(
                       activity.clockSeconds +

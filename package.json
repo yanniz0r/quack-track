@@ -2,7 +2,7 @@
   "name": "timetracking",
   "version": "1.0.0",
   "scripts": {
-    "dev": "blitz dev",
+    "dev": "DATABASE_URL=postgresql://postgres:somepassword@localhost:5432/timetracking blitz dev",
     "build": "blitz build",
     "start": "blitz start -p $PORT",
     "studio": "blitz prisma studio",
