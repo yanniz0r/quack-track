@@ -4,7 +4,7 @@ import Input, { Label } from "app/core/components/input"
 import { useFormik } from "formik"
 import { invalidateQuery, useMutation } from "@blitzjs/core"
 import createActivityForNamespace from "../mutations/create-activity-for-namespace"
-import getActivitiesForNamespaceAndCurrentUser from "../queries/get-activities-for-namespace-and-current-user"
+import getNamespaceWithActivities from "../queries/get-namespace-with-activities"
 
 interface CreateActivityModal {
   selectedNamespaceId?: number
@@ -22,7 +22,7 @@ const CreateActivityModal: FC<CreateActivityModal> = ({ open, setOpen, selectedN
         name: data.name,
         namespaceId: selectedNamespaceId!,
       })
-      invalidateQuery(getActivitiesForNamespaceAndCurrentUser)
+      invalidateQuery(getNamespaceWithActivities)
     },
     initialValues: {
       name: "",

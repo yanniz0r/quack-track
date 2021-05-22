@@ -6,7 +6,7 @@ import { FaTimes } from "react-icons/fa"
 import formatSeconds from "../helper/format-seconds"
 import deleteActivity from "../mutations/delete-activity"
 import startClockOnActivity from "../mutations/start-clock-on-activity"
-import getActivitiesForNamespaceAndCurrentUser from "../queries/get-activities-for-namespace-and-current-user"
+import getNamespaceWithActivities from "../queries/get-namespace-with-activities"
 
 interface ActivityProps {
   activity: Activity
@@ -22,14 +22,14 @@ const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
     await deleteActivityMutation({
       activityId: activity.id,
     })
-    invalidateQuery(getActivitiesForNamespaceAndCurrentUser)
+    invalidateQuery(getNamespaceWithActivities)
   }
 
   const startClockFn = async () => {
     await startClockOnActivityMutation({
       activityId: activity.id,
     })
-    invalidateQuery(getActivitiesForNamespaceAndCurrentUser)
+    invalidateQuery(getNamespaceWithActivities)
   }
 
   useEffect(() => {
