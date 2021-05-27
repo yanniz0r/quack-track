@@ -1,9 +1,9 @@
 import { Activity } from ".prisma/client"
 import { invalidateQuery, useMutation } from "@blitzjs/core"
-import dayjs from "dayjs"
 import { FC, useEffect, useState } from "react"
 import { FaTimes } from "react-icons/fa"
 import formatSeconds from "../helper/format-seconds"
+import getSecondsSinceDate from "../helper/get-seconds-since-date"
 import deleteActivity from "../mutations/delete-activity"
 import startClockOnActivity from "../mutations/start-clock-on-activity"
 import getNamespaceWithActivities from "../queries/get-namespace-with-activities"
@@ -15,7 +15,9 @@ interface ActivityProps {
 
 const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
   const [deleteActivityMutation] = useMutation(deleteActivity)
-  const [addedSeconds, setAddedSeconds] = useState(0)
+  const [addedSeconds, setAddedSeconds] = useState(
+    activity.clockStartedAt ? getSecondsSinceDate(activity.clockStartedAt) : 0
+  )
   const [startClockOnActivityMutation] = useMutation(startClockOnActivity)
 
   const deleteActivityFn = async () => {
@@ -36,7 +38,7 @@ const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
     const startDate = activity.clockStartedAt
     if (startDate) {
       const interval = setInterval(() => {
-        setAddedSeconds(dayjs().diff(startDate, "seconds"))
+        setAddedSeconds(getSecondsSinceDate(startDate))
       }, 5 * 1000)
       return () => clearInterval(interval)
     }
@@ -58,7 +60,7 @@ const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
       >
         <FaTimes />
       </button>
-      <h2 className="text-3xl">{formatSeconds(activity.clockSeconds ?? 0 + addedSeconds)}</h2>
+      <h2 className="text-3xl">{formatSeconds(activity.clockSeconds + addedSeconds)}</h2>
       <h3 className="mt-2">{activity.name}</h3>
     </button>
   )
