@@ -9,6 +9,8 @@ import formatSeconds from "../../helper/format-seconds"
 import getSecondsSinceDate from "../../helper/get-seconds-since-date"
 import updateActivity from "../../mutations/update-activity"
 import getOverviewForCurrentUser from "../../queries/get-overview-for-current-user"
+import useTitleWithActivityIndicator from "../../hooks/use-title-with-activity-indicator"
+import Head from "next/head"
 
 interface OverviewProps {
   bookTime(namespace: Namespace): void
@@ -17,8 +19,12 @@ interface OverviewProps {
 const Overview: FC<OverviewProps> = ({ bookTime }) => {
   const [namespaces] = useQuery(getOverviewForCurrentUser, null)
   const [updateActivityMutation] = useMutation(updateActivity)
+  const title = useTitleWithActivityIndicator("Übersicht")
   return (
     <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       {namespaces.map((namespace, index) => (
         <div className="bg-gray-800 rounded-xl shadow-md mb-5" key={index}>
           <div className="p-5 flex justify-between">

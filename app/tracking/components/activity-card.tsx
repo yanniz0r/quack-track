@@ -6,6 +6,8 @@ import formatSeconds from "../helper/format-seconds"
 import getSecondsSinceDate from "../helper/get-seconds-since-date"
 import deleteActivity from "../mutations/delete-activity"
 import startClockOnActivity from "../mutations/start-clock-on-activity"
+import stopClockForCurrentUser from "../mutations/stop-clock-for-current-user"
+import getActivityWithRunningClock from "../queries/get-activity-with-running-clock"
 import getNamespaceWithActivities from "../queries/get-namespace-with-activities"
 
 interface ActivityProps {
@@ -19,6 +21,7 @@ const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
     activity.clockStartedAt ? getSecondsSinceDate(activity.clockStartedAt) : 0
   )
   const [startClockOnActivityMutation] = useMutation(startClockOnActivity)
+  const [stopClock] = useMutation(stopClockForCurrentUser)
 
   const deleteActivityFn = async () => {
     await deleteActivityMutation({
@@ -27,10 +30,15 @@ const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
     invalidateQuery(getNamespaceWithActivities)
   }
 
-  const startClockFn = async () => {
-    await startClockOnActivityMutation({
-      activityId: activity.id,
-    })
+  const toggleClock = async () => {
+    if (activity.clockStartedAt) {
+      await stopClock()
+    } else {
+      await startClockOnActivityMutation({
+        activityId: activity.id,
+      })
+    }
+    invalidateQuery(getActivityWithRunningClock)
     invalidateQuery(getNamespaceWithActivities)
   }
 
@@ -52,7 +60,7 @@ const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
         activity.clockStartedAt ? "ring-2 ring-teal-600" : ""
       }`}
       key={activity.id}
-      onClick={startClockFn}
+      onClick={toggleClock}
     >
       <button
         className="opacity-0 group-hover:opacity-100 absolute right-4 top-4"

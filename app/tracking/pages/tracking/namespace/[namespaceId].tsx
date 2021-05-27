@@ -1,3 +1,4 @@
+import { Namespace } from ".prisma/client"
 import {
   BlitzPage,
   invalidateQuery,
@@ -6,11 +7,13 @@ import {
   useQuery,
   useRouterQuery,
 } from "@blitzjs/core"
+import { Head } from "blitz"
 import { FC, Suspense, useState } from "react"
 import { FaPlus } from "react-icons/fa"
 import EditableContent from "../../../../core/components/editable-content"
 import ActivityCard from "../../../components/activity-card"
 import CreateActivityModal from "../../../components/create-activity-modal"
+import useTitleWithActivityIndicator from "../../../hooks/use-title-with-activity-indicator"
 import TrackingLayout from "../../../layouts/tracking-layout"
 import updateNamespace from "../../../mutations/update-namespace"
 import getNamespaceWithActivities from "../../../queries/get-namespace-with-activities"
@@ -29,28 +32,34 @@ const NamespaceContent: FC<NamespaceContentProps> = ({
     namespaceId: selectedNamespaceId,
   })
   const [updateNamespaceMutation] = useMutation(updateNamespace)
+  const title = useTitleWithActivityIndicator(namespace.name)
 
   return (
-    <div className="p-6">
-      <h1 className="text-white text-6xl font-semibold mb-7">
-        <EditableContent
-          text={namespace.name}
-          onChange={async (newName) => {
-            await updateNamespaceMutation({
-              namespaceId: selectedNamespaceId,
-              name: newName,
-            })
-            invalidateQuery(getNamespaceWithActivities)
-            invalidateQuery(getNamespacesForCurrentUser)
-          }}
-        />
-      </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
-        {namespace.activities.map((activity) => (
-          <ActivityCard activity={activity} highlighted={highlightedActivityId === activity.id} />
-        ))}
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <div className="p-6">
+        <h1 className="text-white text-6xl font-semibold mb-7">
+          <EditableContent
+            text={namespace.name}
+            onChange={async (newName) => {
+              await updateNamespaceMutation({
+                namespaceId: selectedNamespaceId,
+                name: newName,
+              })
+              invalidateQuery(getNamespaceWithActivities)
+              invalidateQuery(getNamespacesForCurrentUser)
+            }}
+          />
+        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
+          {namespace.activities.map((activity) => (
+            <ActivityCard activity={activity} highlighted={highlightedActivityId === activity.id} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
