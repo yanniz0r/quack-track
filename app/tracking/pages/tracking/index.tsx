@@ -1,15 +1,16 @@
 import { invalidateQuery, useMutation, useQuery } from "@blitzjs/core"
 import { FC, Suspense, useCallback, useEffect, useState } from "react"
-import { FaStop } from "react-icons/fa"
+import { FaClock, FaPlay, FaStop } from "react-icons/fa"
 import EditableContent from "../../../core/components/editable-content"
 import TrackingLayout from "../../layouts/tracking-layout"
 import formatSeconds from "../../helper/format-seconds"
 import getSecondsSinceDate from "../../helper/get-seconds-since-date"
 import stopClockForCurrentUser from "../../mutations/stop-clock-for-current-user"
 import updateActivity from "../../mutations/update-activity"
-import getActivityWithRunningClock from "../../queries/get-activity-with-running-clock"
 import Head from "next/head"
 import useTitleWithActivityIndicator from "../../hooks/use-title-with-activity-indicator"
+import getFeaturedActivity from "../../queries/get-featured-activity"
+import startClockOnActivity from "../../mutations/start-clock-on-activity"
 
 const CIRCLE_SIZE = 85
 const CIRCLE_STROKE = 4
@@ -18,18 +19,27 @@ const CIRCUMFERENCE = CIRCLE_RADIUS * 2 * Math.PI
 
 const RunningClock: FC = () => {
   const [stopClockMutation] = useMutation(stopClockForCurrentUser)
-  const [activity] = useQuery(getActivityWithRunningClock, null)
+  const [activity] = useQuery(getFeaturedActivity, null)
   const [updateActivityMutation] = useMutation(updateActivity)
+  const [startClockOnActivityMutation] = useMutation(startClockOnActivity)
   const [addedSeconds, setAddedSeconds] = useState(
     activity?.clockStartedAt ? getSecondsSinceDate(activity.clockStartedAt) : 0
   )
   const title = useTitleWithActivityIndicator("Dashboard")
 
-  const stopClock = useCallback(() => {
-    stopClockMutation().then(() => {
-      invalidateQuery(getActivityWithRunningClock)
+  const isClockRunning = Boolean(activity?.clockStartedAt)
+
+  const toggleClock = useCallback(() => {
+    if (!activity) return
+    const action = activity.clockStartedAt
+      ? stopClockMutation()
+      : startClockOnActivityMutation({
+          activityId: activity.id,
+        })
+    action.then(() => {
+      invalidateQuery(getFeaturedActivity)
     })
-  }, [stopClockMutation])
+  }, [stopClockMutation, isClockRunning])
 
   useEffect(() => {
     if (!activity) {
@@ -57,7 +67,11 @@ const RunningClock: FC = () => {
       {activity && (
         <div className="bg-gray-800 p-5 rounded-xl shadow-md flex">
           <div className="flex items-center relative">
-            <svg width={CIRCLE_SIZE} height={CIRCLE_SIZE}>
+            <svg
+              width={CIRCLE_SIZE}
+              height={CIRCLE_SIZE}
+              className={`${isClockRunning ? "opacity-100" : "opacity-0"} transition-all`}
+            >
               <circle
                 style={{
                   strokeDasharray: `${CIRCUMFERENCE} ${CIRCUMFERENCE}`,
@@ -77,12 +91,16 @@ const RunningClock: FC = () => {
           </div>
           <div className="relative flex-grow ml-4">
             <button
-              onClick={stopClock}
-              className="flex absolute right-0 top-0 items-center justify-center border-red-500 border-2 font-bold text-red-500 rounded-full h-7 w-7 text-xs"
+              onClick={toggleClock}
+              className={`flex absolute right-0 top-0 items-center justify-center border-2 font-bold  rounded-full h-7 w-7 text-xs ${
+                isClockRunning ? "border-red-500 text-red-500" : "border-green-500 text-green-500"
+              }`}
             >
-              <FaStop />
+              {isClockRunning ? <FaStop /> : <FaClock />}
             </button>
-            <h4 className="uppercase text-gray-400">Laufende Uhr</h4>
+            <h4 className="uppercase text-gray-400">
+              {isClockRunning ? "Laufende Uhr" : "Letzte Aktivität"}
+            </h4>
             <h3 className="text-3xl pt-1">
               <EditableContent
                 onChange={async (newName) => {
@@ -90,7 +108,7 @@ const RunningClock: FC = () => {
                     activityId: activity.id,
                     name: newName,
                   })
-                  invalidateQuery(getActivityWithRunningClock)
+                  invalidateQuery(getFeaturedActivity)
                 }}
                 text={activity.name}
               />

@@ -72,6 +72,8 @@ model Activity {
   clockSeconds       Int       @default(0)
   bookedClockSeconds Int       @default(0)
   namespace          Namespace @relation(fields: [namespaceId], references: [id])
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @default(now()) @updatedAt
 }
 
 enum TokenType {
