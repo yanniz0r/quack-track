@@ -11,7 +11,7 @@ import { FaPlus } from "react-icons/fa"
 import EditableContent from "../../../../core/components/editable-content"
 import ActivityCard from "../../../components/activity-card"
 import CreateActivityModal from "../../../components/create-activity-modal"
-import TrackingPage from "../../../components/tracking-page"
+import TrackingLayout from "../../../layouts/tracking-layout"
 import updateNamespace from "../../../mutations/update-namespace"
 import getNamespaceWithActivities from "../../../queries/get-namespace-with-activities"
 import getNamespacesForCurrentUser from "../../../queries/get-namespaces-for-current-user"
@@ -74,7 +74,7 @@ const TrackingNamespace: BlitzPage = () => {
   )
 
   return (
-    <TrackingPage modals={modals}>
+    <TrackingLayout modals={modals}>
       {namespaceId && (
         <Suspense fallback="Loading...">
           <NamespaceContent
@@ -89,7 +89,7 @@ const TrackingNamespace: BlitzPage = () => {
       >
         <FaPlus />
       </button>
-    </TrackingPage>
+    </TrackingLayout>
   )
 }
 

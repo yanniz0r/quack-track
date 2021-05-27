@@ -1,15 +1,15 @@
 import { Link, Routes, useParam } from "@blitzjs/core"
 import { FC, ReactNode, Suspense, useState } from "react"
 import { FaPlus, FaSearch } from "react-icons/fa"
-import CreateNamespaceModal from "./create-namespace-modal"
-import NamespaceColumn, { NamespaceColumnSkeleton } from "./namespace-column"
-import SearchModal from "./search-modal"
+import CreateNamespaceModal from "../components/create-namespace-modal"
+import NamespaceColumn, { NamespaceColumnSkeleton } from "../components/namespace-column"
+import SearchModal from "../components/search-modal"
 
-interface TrackingPageProps {
+interface TrackingLayoutProps {
   modals?: ReactNode
 }
 
-const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
+const TrackingLayout: FC<TrackingLayoutProps> = ({ children, modals }) => {
   const [createNamespaceModalOpen, setCreateNamespaceModalOpen] = useState(false)
   const [searchModalOpen, setSearchModalOpen] = useState(false)
   const selectedNamespaceId = useParam("namespaceId", "string")
@@ -54,14 +54,27 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
           </div>
         </div>
         <div className="min-h-screen flex-grow flex flex-col">
-          <div className="bg-gray-800 flex">
-            <button
-              className="h-16 px-7 w-full text-lg flex flex-row items-center"
-              onClick={() => setSearchModalOpen(true)}
-            >
-              <FaSearch className="mr-3" />
-              <span>Schnellsuche</span>
-            </button>
+          <div className="h-16 flex flex-row">
+            <div className="bg-gray-800 flex h-full flex-grow">
+              <button
+                className="px-7 w-full text-lg flex flex-row items-center"
+                onClick={() => setSearchModalOpen(true)}
+              >
+                <FaSearch className="mr-3" />
+                <span>Schnellsuche</span>
+              </button>
+            </div>
+            <div className="h-full border-b border-gray-800 flex items-center">
+              <div className="px-4 flex-col flex">
+                <span className="font-bold">Yannic</span>
+                <span className="text-gray-600 font-bold text-xs uppercase">Basic</span>
+              </div>
+              <div className="pr-4">
+                <div className="h-12 w-12 rounded-full flex justify-center items-center text-xl font-bold bg-pink-700">
+                  Y
+                </div>
+              </div>
+            </div>
           </div>
           <div className="relative flex-grow ">{children}</div>
         </div>
@@ -70,4 +83,4 @@ const TrackingPage: FC<TrackingPageProps> = ({ children, modals }) => {
   )
 }
 
-export default TrackingPage
+export default TrackingLayout

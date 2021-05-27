@@ -4,7 +4,7 @@ import { FC, Suspense, useMemo, useState } from "react"
 import EditableContent from "../../../core/components/editable-content"
 import Modal from "../../../core/components/modal"
 import BookTimeModal from "../../components/book-time-modal"
-import TrackingPage from "../../components/tracking-page"
+import TrackingLayout from "../../layouts/tracking-layout"
 import formatSeconds from "../../helper/format-seconds"
 import getSecondsSinceDate from "../../helper/get-seconds-since-date"
 import updateActivity from "../../mutations/update-activity"
@@ -95,7 +95,7 @@ const TrackingOverview: BlitzPage = () => {
   )
 
   return (
-    <TrackingPage modals={modals}>
+    <TrackingLayout modals={modals}>
       <div className="p-7">
         <h1 className="text-white text-6xl font-semibold mb-7">Übersicht</h1>
         <p className="text-lg mb-10">Hier findest du eine Übersicht über deine erfasste Zeit.</p>
@@ -103,7 +103,7 @@ const TrackingOverview: BlitzPage = () => {
           <Overview bookTime={setBookTimeModal} />
         </Suspense>
       </div>
-    </TrackingPage>
+    </TrackingLayout>
   )
 }
 

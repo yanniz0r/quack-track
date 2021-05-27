@@ -2,7 +2,7 @@ import { invalidateQuery, useMutation, useQuery } from "@blitzjs/core"
 import { FC, Suspense, useCallback, useEffect, useState } from "react"
 import { FaStop } from "react-icons/fa"
 import EditableContent from "../../../core/components/editable-content"
-import TrackingPage from "../../components/tracking-page"
+import TrackingLayout from "../../layouts/tracking-layout"
 import formatSeconds from "../../helper/format-seconds"
 import getSecondsSinceDate from "../../helper/get-seconds-since-date"
 import stopClockForCurrentUser from "../../mutations/stop-clock-for-current-user"
@@ -100,14 +100,14 @@ const RunningClock: FC = () => {
 
 const TrackingDashboard: FC = () => {
   return (
-    <TrackingPage>
+    <TrackingLayout>
       <div className="p-7">
         <h1 className="text-white text-6xl font-semibold mb-7">Dashboard</h1>
         <Suspense fallback="Loading...">
           <RunningClock />
         </Suspense>
       </div>
-    </TrackingPage>
+    </TrackingLayout>
   )
 }
 
