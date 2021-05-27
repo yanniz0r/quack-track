@@ -45,7 +45,7 @@ const CreateActivityModal: FC<CreateActivityModal> = ({ open, setOpen, selectedN
         </p>
         <form className="flex flex-col" onSubmit={form.handleSubmit}>
           <Label name="name">Name der Aktivität</Label>
-          <Input name="name" onChange={form.handleChange} placeholder="Tätigkeit" />
+          <Input light name="name" onChange={form.handleChange} placeholder="Tätigkeit" />
           <button
             disabled={createActivityMutationState.isLoading}
             type="submit"

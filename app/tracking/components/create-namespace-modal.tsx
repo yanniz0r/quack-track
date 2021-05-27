@@ -44,6 +44,7 @@ const CreateNamespaceModal: FC<CreateNamespaceModal> = ({ open, setOpen }) => {
         <form className="flex flex-col" onSubmit={form.handleSubmit}>
           <Label name="name">Name vom Namespace</Label>
           <Input
+            light
             name="name"
             onChange={form.handleChange}
             placeholder="Kunde, Projekt, wonach dir ist"

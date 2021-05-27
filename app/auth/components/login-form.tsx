@@ -26,7 +26,6 @@ export const LoginForm = (props: LoginFormProps) => {
       password: "",
     },
     async onSubmit(values) {
-      console.log(values)
       try {
         await loginMutation(values)
         props.onSuccess?.()
@@ -46,17 +45,17 @@ export const LoginForm = (props: LoginFormProps) => {
   return (
     <div>
       <form onSubmit={form.handleSubmit}>
-        <Label>
-          Email
+        <div className="mb-5">
+          <Label>Email</Label>
           <Input
             name="email"
             placeholder="Email"
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />
-        </Label>
-        <Label>
-          Password
+        </div>
+        <div className="mb-5">
+          <Label>Password</Label>
           <Input
             name="password"
             placeholder="Password"
@@ -64,19 +63,23 @@ export const LoginForm = (props: LoginFormProps) => {
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />
-        </Label>
+        </div>
         <div>
           <Link href={Routes.ForgotPasswordPage()}>
-            <a>Forgot your password?</a>
+            <a className="text-green-400">Forgot your password?</a>
           </Link>
         </div>
-        <button className="bg-gradient-to-r from-teal-400 to-green-600 text-white font-medium px-4 py-2 rounded-lg">
+        <button className="bg-gradient-to-r from-teal-400 to-green-600 text-white font-medium px-4 py-2 rounded-lg mt-5">
           Anmelden
         </button>
       </form>
 
-      <div style={{ marginTop: "1rem" }}>
-        Kein Account? Jetzt <Link href={Routes.SignupPage()}>registrieren</Link>!
+      <div style={{ marginTop: "1rem" }} className="text-gray-400">
+        Kein Account? Jetzt{" "}
+        <Link href={Routes.SignupPage()}>
+          <a className="text-green-400">registrieren</a>
+        </Link>
+        !
       </div>
     </div>
   )
