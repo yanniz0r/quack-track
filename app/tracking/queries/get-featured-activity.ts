@@ -1,5 +1,5 @@
 import { AuthenticationError, Ctx } from "blitz"
-import db, { Activity } from "db"
+import db from "db"
 import getCurrentUser from "../../users/queries/getCurrentUser"
 
 export default async function getFeaturedActivity(data: null, ctx: Ctx) {

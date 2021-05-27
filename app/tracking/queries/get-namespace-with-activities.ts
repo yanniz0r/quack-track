@@ -19,7 +19,11 @@ export default async function getNamespaceWithActivities(filter: Filter, ctx: Ct
       id: filter.namespaceId,
     },
     include: {
-      activities: true,
+      activities: {
+        orderBy: {
+          id: "asc",
+        },
+      },
     },
   })
   if (!namespace) {

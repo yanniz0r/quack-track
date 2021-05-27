@@ -88,6 +88,7 @@ const SearchModal: FC<SearchModalProps> = (props) => {
       <div className="p-5">
         <Input
           autoFocus
+          light
           placeholder="Suche nach irgendwas"
           value={query}
           onChange={(e) => setQuery(e.currentTarget.value)}

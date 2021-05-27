@@ -13,9 +13,10 @@ import getNamespaceWithActivities from "../queries/get-namespace-with-activities
 interface ActivityProps {
   activity: Activity
   highlighted?: boolean
+  afterMutate?(): void
 }
 
-const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
+const ActivityCard: FC<ActivityProps> = ({ activity, highlighted, afterMutate }) => {
   const [deleteActivityMutation] = useMutation(deleteActivity)
   const [addedSeconds, setAddedSeconds] = useState(
     activity.clockStartedAt ? getSecondsSinceDate(activity.clockStartedAt) : 0
@@ -38,6 +39,7 @@ const ActivityCard: FC<ActivityProps> = ({ activity, highlighted }) => {
         activityId: activity.id,
       })
     }
+    afterMutate?.()
     invalidateQuery(getActivityWithRunningClock)
     invalidateQuery(getNamespaceWithActivities)
   }

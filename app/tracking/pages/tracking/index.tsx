@@ -1,4 +1,4 @@
-import { invalidateQuery, useMutation, useQuery } from "@blitzjs/core"
+import { invalidateQuery, Link, Routes, useMutation, useQuery } from "@blitzjs/core"
 import { FC, Suspense, useCallback, useEffect, useState } from "react"
 import { FaClock, FaPlay, FaStop } from "react-icons/fa"
 import EditableContent from "../../../core/components/editable-content"
@@ -11,6 +11,10 @@ import Head from "next/head"
 import useTitleWithActivityIndicator from "../../hooks/use-title-with-activity-indicator"
 import getFeaturedActivity from "../../queries/get-featured-activity"
 import startClockOnActivity from "../../mutations/start-clock-on-activity"
+import getActivityWithRunningClock from "../../queries/get-activity-with-running-clock"
+import getRecentActivities from "../../queries/get-recent-activities"
+import ActivityCard from "../../components/activity-card"
+import { Namespace } from ".prisma/client"
 
 const CIRCLE_SIZE = 85
 const CIRCLE_STROKE = 4
@@ -38,6 +42,7 @@ const RunningClock: FC = () => {
         })
     action.then(() => {
       invalidateQuery(getFeaturedActivity)
+      invalidateQuery(getActivityWithRunningClock)
     })
   }, [stopClockMutation, isClockRunning])
 
@@ -92,7 +97,7 @@ const RunningClock: FC = () => {
           <div className="relative flex-grow ml-4">
             <button
               onClick={toggleClock}
-              className={`flex absolute right-0 top-0 items-center justify-center border-2 font-bold  rounded-full h-7 w-7 text-xs ${
+              className={`flex absolute right-0 top-0 items-center justify-center border-2 font-bold  rounded-full h-7 w-7 text-xs transition-all ${
                 isClockRunning ? "border-red-500 text-red-500" : "border-green-500 text-green-500"
               }`}
             >
@@ -123,6 +128,59 @@ const RunningClock: FC = () => {
   )
 }
 
+const RecentActivities: FC = () => {
+  const [recentActivities] = useQuery(getRecentActivities, null)
+  const [selectedNamespace, setSelectedNamespace] = useState<number>()
+
+  const namespaces: Record<number, Namespace> = {}
+  recentActivities.forEach((activity) => {
+    if (!namespaces[activity.namespace.id]) {
+      namespaces[activity.namespace.id] = activity.namespace
+    }
+  })
+
+  return (
+    <div>
+      <div className="flex flex-row mb-4">
+        {Object.values(namespaces).map((namespace) => (
+          <button
+            onClick={() => {
+              setSelectedNamespace(namespace.id === selectedNamespace ? undefined : namespace.id)
+            }}
+            className={`mr-2 p-2 border border-yellow-400 rounded-lg text-yellow-400 transition-all ${
+              typeof selectedNamespace !== "undefined" &&
+              selectedNamespace !== namespace.id &&
+              "opacity-50"
+            }`}
+          >
+            {namespace.name}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-row flex-wrap">
+        {recentActivities.map((activity) => (
+          <Link
+            href={Routes.TrackingNamespace({
+              namespaceId: activity.namespaceId,
+              activity: activity.id,
+            })}
+          >
+            <a
+              className={`px-4 py-2 bg-gray-800 rounded-lg mr-2 mb-2 flex flex-row items-center transition-all ${
+                typeof selectedNamespace !== "undefined" &&
+                selectedNamespace !== activity.namespaceId &&
+                "bg-opacity-50"
+              }`}
+            >
+              {activity.name} <div className="rounded-full bg-yellow-500 w-2 h-2 ml-3" />
+            </a>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const TrackingDashboard: FC = () => {
   return (
     <TrackingLayout>
@@ -130,6 +188,11 @@ const TrackingDashboard: FC = () => {
         <h1 className="text-white text-6xl font-semibold mb-7">Dashboard</h1>
         <Suspense fallback="Loading...">
           <RunningClock />
+        </Suspense>
+
+        <h2 className="text-white text-3xl font-semibold my-7">Letzte Aktivitäten</h2>
+        <Suspense fallback="Loading...">
+          <RecentActivities />
         </Suspense>
       </div>
     </TrackingLayout>
