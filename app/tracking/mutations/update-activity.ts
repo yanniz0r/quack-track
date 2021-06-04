@@ -4,6 +4,7 @@ import getCurrentUser from "../../users/queries/getCurrentUser"
 interface UpdateActivityData {
   activityId: number
   name?: string
+  clockSeconds?: number
 }
 
 const updateActivity = async (data: UpdateActivityData, ctx: Ctx) => {
@@ -41,6 +42,8 @@ const updateActivity = async (data: UpdateActivityData, ctx: Ctx) => {
     },
     data: {
       name: data.name,
+      clockSeconds: data.clockSeconds,
+      clockStartedAt: data.clockSeconds && activity.clockStartedAt ? new Date() : undefined
     },
   })
 }

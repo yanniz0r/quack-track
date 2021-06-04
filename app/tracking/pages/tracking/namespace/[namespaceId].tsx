@@ -1,4 +1,3 @@
-import { Namespace } from ".prisma/client"
 import {
   BlitzPage,
   invalidateQuery,

@@ -13,24 +13,22 @@ const EditableContent: FC<EditableContentProps> = ({ text, onChange }) => {
   const [editedText, setEditedText] = useState(text)
 
   return (
-    <button
-      type="button"
-      className={`w-full text-left relative ${edit ? "p-1 bg-white" : ""} ${
-        mutating ? "animate-pulse" : ""
-      } bg-opacity-5 transition-all rounded-lg`}
+    <div
+      className="w-full text-left relative cursor-pointer"
       onClick={() => setEdit(true)}
     >
       {edit ? (
         <input
-          className="w-full bg-transparent"
+          className="w-full bg-transparent z-20 relative"
           defaultValue={text}
           onChange={(e) => setEditedText(e.currentTarget.value)}
         />
       ) : (
         text
       )}
+      <div className={`bg-white bg-opacity-5 w-full h-full absolute top-0 rounded-lg transition-all transform ${edit ? 'scale-105' : 'scale-0'}`} />
       <div
-        className={`absolute right-0 top-0 h-full transform transition-all ${
+        className={`absolute z-30 right-0 top-0 h-full transform transition-all ${
           edit && !mutating ? "scale-100" : "scale-0"
         }`}
       >
@@ -59,7 +57,7 @@ const EditableContent: FC<EditableContentProps> = ({ text, onChange }) => {
           <FaTimes />
         </button>
       </div>
-    </button>
+    </div>
   )
 }
 
