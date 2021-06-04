@@ -16,4 +16,6 @@ export const Label: FC<HTMLProps<HTMLLabelElement>> = (props) => {
   return <label {...props} className="text-teal-600 text-sm mb-2 inline-block" />
 }
 
+export const ErrorMessage: FC = ({ children }) => <p className="text-red-400">{children}</p>
+
 export default Input

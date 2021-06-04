@@ -2,7 +2,7 @@ import { AuthenticationError, Link, useMutation, Routes } from "blitz"
 import { FORM_ERROR } from "app/core/components/Form"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
-import Input, { Label } from "../../core/components/input"
+import Input, { ErrorMessage, Label } from "../../core/components/input"
 import { useFormik } from "formik"
 import * as zod from "zod"
 
@@ -53,6 +53,9 @@ export const LoginForm = (props: LoginFormProps) => {
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />
+          {form.errors.email && form.touched.email && (
+            <ErrorMessage>{form.errors.email}</ErrorMessage>
+          )}
         </div>
         <div className="mb-5">
           <Label>Password</Label>
@@ -63,6 +66,9 @@ export const LoginForm = (props: LoginFormProps) => {
             onChange={form.handleChange}
             onBlur={form.handleBlur}
           />
+          {form.errors.password && form.touched.password && (
+            <ErrorMessage>{form.errors.password}</ErrorMessage>
+          )}
         </div>
         <div>
           <Link href={Routes.ForgotPasswordPage()}>
