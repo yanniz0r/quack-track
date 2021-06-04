@@ -43,6 +43,7 @@ const RunningClock: FC = () => {
     action.then(() => {
       invalidateQuery(getFeaturedActivity)
       invalidateQuery(getActivityWithRunningClock)
+      setAddedSeconds(0)
     })
   }, [stopClockMutation, isClockRunning])
 
