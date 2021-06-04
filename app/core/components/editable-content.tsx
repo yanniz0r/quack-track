@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import { FC, useState } from "react"
 import { FaCheck, FaTimes } from "react-icons/fa"
 
@@ -13,10 +14,7 @@ const EditableContent: FC<EditableContentProps> = ({ text, onChange }) => {
   const [editedText, setEditedText] = useState(text)
 
   return (
-    <div
-      className="w-full text-left relative cursor-pointer"
-      onClick={() => setEdit(true)}
-    >
+    <div className="w-full text-left relative cursor-pointer" onClick={() => setEdit(true)}>
       {edit ? (
         <input
           className="w-full bg-transparent z-20 relative"
@@ -26,7 +24,11 @@ const EditableContent: FC<EditableContentProps> = ({ text, onChange }) => {
       ) : (
         text
       )}
-      <div className={`bg-white bg-opacity-5 w-full h-full absolute top-0 rounded-lg transition-all transform ${edit ? 'scale-105' : 'scale-0'}`} />
+      <div
+        className={`bg-white bg-opacity-5 w-full h-full absolute top-0 rounded-lg transition-all transform ${
+          edit ? "scale-105" : "scale-0"
+        }`}
+      />
       <div
         className={`absolute z-30 right-0 top-0 h-full transform transition-all ${
           edit && !mutating ? "scale-100" : "scale-0"

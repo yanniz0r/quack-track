@@ -1,5 +1,5 @@
 import { AuthenticationError, Link, useMutation, Routes } from "blitz"
-import { Form, FORM_ERROR } from "app/core/components/Form"
+import { FORM_ERROR } from "app/core/components/Form"
 import login from "app/auth/mutations/login"
 import { Login } from "app/auth/validations"
 import Input, { Label } from "../../core/components/input"
