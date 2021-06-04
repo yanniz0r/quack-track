@@ -1,9 +1,30 @@
-import { Link, Routes, useParam } from "@blitzjs/core"
+import { Link, Routes, useParam, useQuery } from "@blitzjs/core"
 import { FC, ReactNode, Suspense, useState } from "react"
 import { FaPlus, FaSearch } from "react-icons/fa"
+import getCurrentUser from "../../users/queries/getCurrentUser"
 import CreateNamespaceModal from "../components/create-namespace-modal"
 import NamespaceColumn, { NamespaceColumnSkeleton } from "../components/namespace-column"
 import SearchModal from "../components/search-modal"
+
+const Userinfo: FC = () => {
+  const [currentUser] = useQuery(getCurrentUser, null)
+
+  if (!currentUser) return null
+
+  return (
+    <div className="h-full border-b border-gray-800 flex items-center">
+      <div className="px-4 flex-col flex">
+        <span className="font-bold">{currentUser.name}</span>
+        <span className="text-gray-600 font-bold text-xs uppercase">Basic</span>
+      </div>
+      <div className="pr-4">
+        <div className="h-12 w-12 rounded-full flex justify-center items-center text-xl font-bold bg-pink-700">
+          {currentUser.name[0].toUpperCase()}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 interface TrackingLayoutProps {
   modals?: ReactNode
@@ -64,17 +85,9 @@ const TrackingLayout: FC<TrackingLayoutProps> = ({ children, modals }) => {
                 <span>Schnellsuche</span>
               </button>
             </div>
-            <div className="h-full border-b border-gray-800 flex items-center">
-              <div className="px-4 flex-col flex">
-                <span className="font-bold">Yannic</span>
-                <span className="text-gray-600 font-bold text-xs uppercase">Basic</span>
-              </div>
-              <div className="pr-4">
-                <div className="h-12 w-12 rounded-full flex justify-center items-center text-xl font-bold bg-pink-700">
-                  Y
-                </div>
-              </div>
-            </div>
+            <Suspense fallback={null}>
+              <Userinfo />
+            </Suspense>
           </div>
           <div className="relative flex-grow ">{children}</div>
         </div>
