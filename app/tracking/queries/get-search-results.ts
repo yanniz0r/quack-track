@@ -12,6 +12,7 @@ export default async function getSearchResults(data: GetSearchResultsData, ctx: 
 
   const namespaces = await db.namespace.findMany({
     where: {
+      userId: currentUser.id,
       name: {
         contains: data.query,
       },
@@ -22,6 +23,9 @@ export default async function getSearchResults(data: GetSearchResultsData, ctx: 
     where: {
       name: {
         contains: data.query,
+      },
+      namespace: {
+        userId: currentUser.id,
       },
     },
   })
