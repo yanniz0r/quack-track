@@ -26,6 +26,13 @@ export default async function getFeaturedActivity(data: null, ctx: Ctx) {
   if (activityWithRunningClock) return activityWithRunningClock
 
   return db.activity.findFirst({
+    where: {
+      namespace: {
+        user: {
+          id: currentUser.id,
+        },
+      },
+    },
     include: {
       namespace: true,
     },
